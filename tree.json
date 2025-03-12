@@ -1,0 +1,72 @@
+{
+  "components": {
+    "common": [
+      "Header",
+      "Sidebar",
+      "Footer",
+      "Notification",
+      "Modal",
+      "Table",
+      "SearchBar"
+    ],
+    "auth": [
+      "Login",
+      "Logout",
+      "PrivateRoute"
+    ],
+    "admin": [
+      "AdminDashboard",
+      "UserManagement",
+      "DrugManagement",
+      "OrderManagement",
+      "SupplierManagement",
+      "AuditLog"
+    ],
+    "medrep": [
+      "MedRepDashboard",
+      "DoctorVisit",
+      "SalesPerformance",
+      "MedRepProfile",
+      "SalesRecord",
+      "FeedbackForm"
+    ]
+  },
+  "pages": {
+    "auth": [
+      "LoginPage",
+      "LogoutPage"
+    ],
+    "admin": [
+      "Dashboard",
+      "Users",
+      "Drugs",
+      "Orders",
+      "Suppliers",
+      "Audit"
+    ],
+    "medrep": [
+      "Dashboard",
+      "Visits",
+      "Sales",
+      "Feedback",
+      "Doctor"
+    ]
+  },
+  "store": [
+    "auth.js",
+    "user.js",
+    "drug.js",
+    "order.js",
+    "medrep.js"
+  ],
+  "router": [
+    "AppRouter.jsx"
+  ],
+  "assets": {
+    "css": [
+      "tailwind.css"
+    ],
+    "images": [],
+    "fonts": []
+  }
+}
