@@ -4,11 +4,16 @@ import {
   Home,
   User,
   ClipboardList,
-  Store,
+  StoreIcon,
   Map,
   ShoppingCart,
   LogOut,
-  StoreIcon,
+  Bell,
+  Shield,
+  Users,
+  FileText,
+  Settings,
+  Users2,
 } from "lucide-react";
 import { useDarkMode } from "../../../context/DarkmodeContext"; // وارد کردن useDarkMode برای استفاده از وضعیت دارک مود
 
@@ -32,7 +37,7 @@ const Sidebar = ({ role = "admin" }) => {
       key: "Users",
       name: "کاربران",
       path: "/admin/users",
-      icon: <User className="w-5 h-5" />,
+      icon: <Users2 className="w-5 h-5" />,
     },
     {
       key: "AreaAdmin",
@@ -47,10 +52,46 @@ const Sidebar = ({ role = "admin" }) => {
       icon: <ClipboardList className="w-5 h-5" />,
     },
     {
-      key: "Orders",
-      name: "سفارشات",
-      path: "/admin/orders",
+      key: "product",
+      name: "محصول",
+      path: "/admin/product",
       icon: <ShoppingCart className="w-5 h-5" />,
+    },
+    {
+      key: "pharmacies",
+      name: "داروخانه ها",
+      path: "/admin/pharmacies",
+      icon: <Map className="w-5 h-5" />,
+    },
+    // {
+    //   key: "reports",
+    //   name: "گزارشات",
+    //   path: "/admin/reports",
+    //   icon: <FileText className="w-5 h-5" />,
+    // },
+    {
+      key: "roles-permissions",
+      name: "دسترسی ها",
+      path: "/admin/roles-permissions",
+      icon: <Shield className="w-5 h-5" />,
+    },
+    {
+      key: "medreps",
+      name: "مد رپ",
+      path: "/admin/medreps",
+      icon: <Users className="w-5 h-5" />,
+    },
+    {
+      key: "notifications",
+      name: " اعلان ها ",
+      path: "/admin/notifications",
+      icon: <Bell className="w-5 h-5" />,
+    },
+    {
+      key: "ُsettings",
+      name: " تنظیمات ",
+      path: "/admin/settings",
+      icon: <Settings className="w-5 h-5" />,
     },
   ];
 
@@ -106,7 +147,7 @@ const Sidebar = ({ role = "admin" }) => {
       <div className="text-2xl font-bold mb-6 text-center text-blue-600 dark:text-blue-400">
         PharmaTrack
       </div>
-      <nav className="flex-1">
+      <nav className="flex-1  overflow-y-auto max-h-[calc(100vh-120px)]">
         {links.map((link) => (
           <NavLink
             key={link.key}

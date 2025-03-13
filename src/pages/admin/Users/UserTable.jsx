@@ -1,38 +1,39 @@
-import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import React, { useState } from "react";
+import Modal from "../../../Ui/Modal";
+import { Plus } from "lucide-react";
+import Filter from "../../../Ui/Filter";
 import { useDarkMode } from "../../../context/DarkmodeContext";
-import Modal from '../../../Ui/Modal'; 
+import { useSearchParams } from "react-router-dom";
 
 const UserTable = () => {
   const { isDarkMode } = useDarkMode();
-  
+  const [search, setSearch] = useState(""); 
   const [users, setUsers] = useState([
-    { id: 1, name: 'علی رضایی', email: 'ali@gmail.com', role: 'ادمین', status: 'فعال' },
-    { id: 2, name: 'سارا محمدی', email: 'sara@gmail.com', role: 'مد رپ', status: 'غیرفعال' },
-    { id: 3, name: 'حسین عباسی', email: 'hossein@gmail.com', role: 'ادمین', status: 'فعال' },
-    { id: 4, name: 'فاطمه حسینی', email: 'fatemeh@gmail.com', role: 'مد رپ', status: 'فعال' },
+    { id: 1, name: "علی رضایی", email: "ali@gmail.com", role: "ادمین", status: "فعال" },
+    { id: 2, name: "سارا محمدی", email: "sara@gmail.com", role: "مد رپ", status: "غیرفعال" },
+    { id: 3, name: "حسین عباسی", email: "hossein@gmail.com", role: "ادمین", status: "فعال" },
+    { id: 4, name: "فاطمه حسینی", email: "fatemeh@gmail.com", role: "مد رپ", status: "فعال" },
   ]);
-  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newUser, setNewUser] = useState({ name: '', email: '', role: '', status: '' });
+  const [newUser, setNewUser] = useState({ name: "", email: "", role: "", status: "" });
   const [editUserId, setEditUserId] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterStatus = searchParams.get("status") || "all";
 
   const toggleModal = () => setIsModalOpen(!isModalOpen); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editUserId === null) {
-    
       const newUserData = { ...newUser, id: Date.now() };
       setUsers([...users, newUserData]);
     } else {
-     
       const updatedUsers = users.map((user) =>
         user.id === editUserId ? { ...user, ...newUser } : user
       );
       setUsers(updatedUsers);
     }
-    setNewUser({ name: '', email: '', role: '', status: '' }); 
+    setNewUser({ name: "", email: "", role: "", status: "" }); 
     setEditUserId(null); 
     toggleModal(); 
   };
@@ -48,17 +49,33 @@ const UserTable = () => {
     setUsers(updatedUsers);
   };
 
+  
+  const filteredUsers = users
+    .filter(
+      (user) =>
+        user.name.toLowerCase().includes(search.toLowerCase()) || // جستجو بر اساس نام
+        user.email.toLowerCase().includes(search.toLowerCase()) // جستجو بر اساس ایمیل
+    )
+    .filter((user) => filterStatus && filterStatus !== "all" ? user.status === filterStatus : true); // فیلتر وضعیت
+
+  // highlight text searching 
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm) return text;
+    const parts = text.split(new RegExp(`(${searchTerm})`, "gi"));
+    return parts.map((part, index) =>
+      part.toLowerCase() === searchTerm.toLowerCase() ? (
+        <span key={index} className="bg-yellow-300 font-bold">{part}</span>
+      ) : (
+        part
+      )
+    );
+  };
+
   return (
     <div className={`p-4 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-black'}`}>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">مدیریت کاربران</h2>
-        <button
-          onClick={toggleModal} 
-          className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          افزودن کاربر جدید
-        </button>
+       
       </div>
 
       {/* Modal for Adding/Editing User */}
@@ -124,6 +141,36 @@ const UserTable = () => {
         </form>
       </Modal>
 
+      {/* جستجو */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="جستجو بر اساس نام یا ایمیل..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)} // تغییر جستجو
+          className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+        />
+      </div>
+
+      {/* status filter*/}
+      <div className="flex justify-between">
+      <Filter
+        filterField="status"
+        options={[
+          { value: "all", label: "همه" },
+          { value: "فعال", label: "فعال" },
+          { value: "غیرفعال", label: "غیرفعال" },
+        ]}
+      />
+       <button
+          onClick={toggleModal}
+          className="flex items-center m-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          افزودن کاربر جدید
+        </button>
+        </div>
+
       {/* User Table */}
       <div className="overflow-x-auto">
         <table className={`min-w-full border border-gray-200 rounded-lg shadow-md ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
@@ -137,10 +184,10 @@ const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <tr key={user.id} className={`border-b border-gray-200 hover:bg-gray-100 ${isDarkMode ? 'hover:bg-gray-600' : ''}`}>
-                <td className="py-3 px-6">{user.name}</td>
-                <td className="py-3 px-6">{user.email}</td>
+                <td className="py-3 px-6">{highlightText(user.name, search)}</td>
+                <td className="py-3 px-6">{highlightText(user.email, search)}</td>
                 <td className="py-3 px-6">{user.role}</td>
                 <td className="py-3 px-6">
                   <span
