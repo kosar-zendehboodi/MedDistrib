@@ -11,6 +11,7 @@ import SalesPerformance from "./pages/medrep/Sales/Sales";
 import Feedback from "./pages/medrep/Feedback/Feedback";
 import Regions from "./pages/admin/Regions/Regions";
 import {  useDarkMode } from "./context/DarkmodeContext";
+import ProfilePage from "./pages/admin/Profile/Prodileuser";
 function App() {
   const [role, setRole] = useState("admin");
   const { isDarkMode } = useDarkMode();
@@ -29,6 +30,7 @@ function App() {
       <Route path="/" element={<LoginPage />} />
       <Route path="/admin" element={<AppLayout role={role} />}>
         <Route path="dashboard" element={<Dashboard role={role} />} />
+        <Route path="Profile" element={<ProfilePage />} />
         <Route path="users" element={<Users />} />
         <Route path="Regions" element={<Regions />} />
         <Route path="drugs" element={<Drugs />} />

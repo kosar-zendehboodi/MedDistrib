@@ -1,10 +1,10 @@
 import React from "react";
 import { Popover } from "@headlessui/react";
 import { ArrowDownCircleIcon, Bell, User, Settings, LogOut, Sun, Moon } from "lucide-react";
-import { useDarkMode } from "../../../context/DarkmodeContext"; // وارد کردن hook برای استفاده از context
+import { useDarkMode } from "../../../context/DarkmodeContext"; 
 
 const Header = ({ role = "admin", username = "John Doe" }) => {
-  const { isDarkMode, toggleDarkMode } = useDarkMode(); // گرفتن وضعیت دارک مود از context
+  const { isDarkMode, toggleDarkMode } = useDarkMode(); 
 
   const profileOptions = [
     { name: "پروفایل", href: "#", icon: User },
